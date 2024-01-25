@@ -1,3 +1,5 @@
 # Spectraread-Plugins
 
-[a link](../Spectraread)
+Plugins of spectraread, see main repository (Spectraread) for installation instructions.
+
+[https://git.luisvmf.com/SpectraRead/](https://git.luisvmf.com/SpectraRead/)
