@@ -55,7 +55,7 @@ def mainloop(meas,single,par):
 		i=i+1
 		if(i>9):
 			i=0
-		time.sleep(0.00001)
+		time.sleep(0.001)
 		return pushval()
 	else:
 		time.sleep(0.3)
