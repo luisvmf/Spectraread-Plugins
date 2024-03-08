@@ -60,8 +60,8 @@ def mainloop(meas,single,par):
 	global oldpar
 	global contstate
 	setinfo(" ")
-	setxlabel("x")
-	setylabel("y")
+	setxlabel("Time (ms)")
+	setylabel("Voltage (V)")
 	parb=par[2].split(" ")
 	#print par
 	#print "meas:"+str(meas)+" single:"+str(single)+" par:"+str(par)
@@ -72,7 +72,7 @@ def mainloop(meas,single,par):
 					print "Open a"
 					contstate=0
 					oldpar=None
-					stream=serial.Serial( '/dev/ttyACM0', 1000000, timeout=0.5, write_timeout=0.2, inter_byte_timeout=0.2, exclusive=1 )  # open first serial port
+					stream=serial.Serial( '/dev/arduino', 1000000, timeout=0.5, write_timeout=0.2, inter_byte_timeout=0.2, exclusive=1 )  # open first serial port
 					stream.flushOutput()
 					stream.flushInput()
 					stream.write(b'\ns\n')
@@ -89,7 +89,7 @@ def mainloop(meas,single,par):
 					print "Open b"
 					contstate=0
 					oldpar=None
-					stream=serial.Serial( '/dev/ttyACM0', 1000000, timeout=0.5, write_timeout=0.2, inter_byte_timeout=0.2, exclusive=1 )  # open first serial port
+					stream=serial.Serial( '/dev/arduino', 1000000, timeout=0.5, write_timeout=0.2, inter_byte_timeout=0.2, exclusive=1 )  # open first serial port
 					stream.flushOutput()
 					stream.flushInput()
 					stream.write(b'\ns\n')
@@ -128,7 +128,8 @@ def mainloop(meas,single,par):
 					#print null
 					#if(null==""):
 					#	raise Exception(" ")
-					trigger='t'+str((parb[1]))+'\n'
+					trigger='t'+str((int(float(parb[1])*1024.0/5.0)))+'\n'
+					print trigger
 					stream.write(trigger)
 					#null=(stream.readline())
 					#print null
@@ -170,22 +171,31 @@ def mainloop(meas,single,par):
 				#print null
 				if("Data:" in null):
 					lenmeasnow=int(null.split("Data:")[1].split("\r\n")[0])
-					myprescaler=(stream.readline()) ###XXX TODO This is the aquired prescaler, use this to calculate x axis for current plot in seconds
+					myprescaler=(stream.readline())
 					print "prescaler:"+str(myprescaler)
 					#print "Decoded len:"+str(lenmeasnow)
 					eventString = stream.read(lenmeasnow*2)
 					#print("4 %s s" % str(time.time()-timeaa))
 					print len(eventString)
-					eventData=' '.join(map(str,((unpack( str(str(lenmeasnow)+'H'), eventString )))))
+					eventData=' '.join(map(str,[5.0*gfhgfh/1024.0 for gfhgfh in map(float,((unpack( str(str(lenmeasnow)+'H'), eventString ))))]))
 					#print(x)
 					#stream.write(b'S')
 					#print x
 					x=""
 					i=0
+					looptime=0
 					while(i<(lenmeasnow-1)):
-						x=x+str(i+1)+" "
+						x=x+str(looptime)+" "
 						i=i+1
-					x=x+str(i+1)
+						if(int(myprescaler)==0):
+							looptime=looptime+0.104167
+						if(int(myprescaler)==1):
+							looptime=looptime+0.052083
+						if(int(myprescaler)==2):
+							looptime=looptime+0.026042
+						if(int(myprescaler)==3):
+							looptime=looptime+0.013021
+					x=x+str(looptime)
 					setxdata(x)
 					setydata(eventData)
 					i=i+1

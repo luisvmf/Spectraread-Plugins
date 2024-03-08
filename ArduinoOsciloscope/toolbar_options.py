@@ -79,12 +79,12 @@ tool_itempointsafter = Gtk.ToolItem()
 tool_itempointsafter.add(labelpointsafter)
 
 tool_itemb = Gtk.ToolItem()
-adjustment = Gtk.Adjustment(value=1,lower=1,upper=1024,step_increment=1,page_increment=1,page_size=10)
-entry = Gtk.SpinButton(adjustment=adjustment, digits=0)
+adjustment = Gtk.Adjustment(value=0,lower=0,upper=5,step_increment=0.01,page_increment=0.01)
+entry = Gtk.SpinButton(adjustment=adjustment, digits=3)
 #Fix a bug in some GTK themes (For example Mint-Y) that causes the buttons to disappear (white background and text in white text entry) when the spin button has focus.
 entry.get_style_context().remove_class(Gtk.STYLE_CLASS_SPINBUTTON)
 entry.set_numeric(True)
-entry.set_width_chars(3)
+entry.set_width_chars(4)
 tool_itemb.add(entry)
 
 
@@ -213,7 +213,7 @@ def gettoolbarvalues():
 	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(freq_combo.get_model()[freq_combo.get_active_iter()][:2][0]-1)+";"
 	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(trigmode)+";"
 	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(buttonb.get_active())+" "
-	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(int(entry.get_value()))+" "
+	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(float(entry.get_value()))+" "
 	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(int(entryb.get_value()))+" "
 	gettoolbarvaluesreturnvalue=gettoolbarvaluesreturnvalue+str(int(entrybb.get_value()))+";"
 	return gettoolbarvaluesreturnvalue
@@ -243,7 +243,7 @@ def changedelement():
 	configfile['1']=str(freq_combo.get_model()[freq_combo.get_active_iter()][:2][0]-1)
 	configfile['2']=str(button.get_active())
 	configfile['3']=str(buttonb.get_active())
-	configfile['4']=str(int(entry.get_value()))
+	configfile['4']=str(float(entry.get_value()))
 	configfile['5']=str(int(entryb.get_value()))
 	configfile['6']=str(int(entrybb.get_value()))
 	configfile.close()
